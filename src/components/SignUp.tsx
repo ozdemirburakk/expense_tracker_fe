@@ -1,10 +1,7 @@
-import { Form, Input, Button, message, Space } from "antd";
+import { Form, Input, Button } from "antd";
 import { useHistory } from "react-router-dom";
 import api from "../utils/api";
-
-const showError = (errorMessage: String) => {
-  message.error(errorMessage);
-};
+import showError from "../utils/showError";
 
 function SignUp() {
   const layout = {
@@ -28,9 +25,8 @@ function SignUp() {
   const onFinish = async (values: any) => {
     try {
       await api.post("/users/register", values);
-      history.push("/login");
+      history.push("/login", { newSignUp: true });
     } catch (error) {
-      console.log({ error });
       showError((error as any).response.data.errorMessage);
     }
   };
@@ -41,7 +37,9 @@ function SignUp() {
       onFinish={onFinish}
       validateMessages={validateMessages}
     >
-      <h2 style={{ textAlign: "center" ,marginBottom:40}}>Register for an account</h2>
+      <h2 style={{ textAlign: "center", marginBottom: 40 }}>
+        Register for an account
+      </h2>
       <Form.Item name="username" label="Username" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
